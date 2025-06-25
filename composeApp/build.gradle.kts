@@ -49,6 +49,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation("io.github.moriafly:salt-ui:2.5.0-alpha03")
+
+//            implementation("androidx.compose.material:material-icons-core")
+            implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
