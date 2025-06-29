@@ -1,6 +1,5 @@
 package com.kartjim.todoest
 
-
 data class Todos (
     val id: Int,
     val title: String,
@@ -12,3 +11,4 @@ data class Todos (
     val areaId: Int = -1,
     val expired: Boolean = false,
 )
+
