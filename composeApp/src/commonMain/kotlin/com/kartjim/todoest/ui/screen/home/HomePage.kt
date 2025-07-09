@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -95,57 +96,65 @@ fun HomePage(
                 }
             }
         }
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(10.dp),
+
+        Box(
+            modifier = Modifier.fillMaxWidth().weight(1f)
         ) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+//                        .padding(10.dp),
+            ) {
 
-            val todos by viewModel.todos.collectAsState()
-            LazyColumn() {
-                items(todos) { todo ->
-                    Column(
-                        modifier = Modifier.clickable(
-                            onClick = {
+                val todos by viewModel.todos.collectAsState()
+                LazyColumn() {
+                    items(todos) { todo ->
+                        Column(
+                            modifier = Modifier.clickable(
+                                onClick = {
 
-                            }
-                        ).fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Checkbox(
-                                checked = false,
-                                onCheckedChange = {
-                                    viewModel.deleteTodo(todo)
                                 }
-                            )
-                            Text(
-                                text = "${todo.title}"
-                            )
+                            ).fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Checkbox(
+                                    checked = false,
+                                    onCheckedChange = {
+                                        viewModel.deleteTodo(todo)
+                                    }
+                                )
+                                Text(
+                                    text = todo.title
+                                )
+                            }
                         }
                     }
                 }
+
             }
 
-        }
-
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            FloatingActionButton(
-                onClick = {
-//                    TODO
-                    viewModel.addTodo()
-                },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .align(Alignment.BottomEnd)
             ) {
-                Icon(Icons.Filled.Add, "新增")
+                FloatingActionButton(
+                    onClick = {
+//                    TODO
+                        viewModel.addTodo()
+                    },
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
+                ) {
+                    Icon(Icons.Filled.Add, "新增")
+                }
             }
         }
+
+
+
     }
 }

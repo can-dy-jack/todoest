@@ -23,15 +23,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kartjim.todoest.ui.screen.calendar.CalendarPage
 import com.kartjim.todoest.ui.screen.home.HomePage
-
-/**
- * TODO 路由组件
- */
-@Composable
-fun Test(label: String) {
-    Text("Test Page, $label")
-}
+import com.kartjim.todoest.ui.screen.matrix.MatrixPage
+import com.kartjim.todoest.ui.screen.settings.SettingsPage
 
 /**
  * 路由列表
@@ -66,9 +61,9 @@ fun AppNavHost (
             composable(item.route) {
                 when (item) {
                     Routers.HOME -> HomePage()
-                    Routers.Calendar -> Test("日历")
-                    Routers.FourD -> Test("四象限")
-                    Routers.Setting -> Test("设置")
+                    Routers.Calendar -> CalendarPage()
+                    Routers.FourD -> MatrixPage()
+                    Routers.Setting -> SettingsPage()
                 }
             }
         }
