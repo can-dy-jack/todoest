@@ -13,12 +13,15 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -49,12 +52,17 @@ enum class Routers (
 @Composable
 fun AppNavHost (
     navControl: NavHostController,
-    route: Routers,
+    title: String?,
     modifier: Modifier = Modifier,
 ) {
+    var start = title;
+    if (title == null) {
+        start = "HOME"
+    }
+
     NavHost(
         navControl,
-        startDestination = route.route,
+        startDestination = start,
         modifier = modifier,
     ) {
         Routers.entries.forEach { item ->
@@ -70,6 +78,26 @@ fun AppNavHost (
     }
 }
 
+fun NavController.navigateSingleInstance(route: String) {
+    val currentBackStack = currentBackStack.value
+    // index 0 destination=NavGraph
+    // index 1 destination=Destination (start)
+    if (currentBackStack.size > 2) {
+        repeat(currentBackStack.size - 2) {
+            popBackStack()
+        }
+    }
+
+    navigate(route) {
+        popUpTo(currentBackStack[1].destination.route!!) {
+            inclusive = true
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier
@@ -77,6 +105,7 @@ fun AppNavigation(
     val navControl = rememberNavController()
     val indexPage = Routers.HOME
     var current by rememberSaveable { mutableIntStateOf(indexPage.ordinal) }
+
 
     Scaffold(
         modifier = modifier,
@@ -88,7 +117,9 @@ fun AppNavigation(
                     NavigationBarItem(
                         selected = current == index,
                         onClick = {
-                            navControl.navigate(route = item.route)
+//                            navControl.navigate(route = item.route)
+//                            current = index
+                            navControl.navigateSingleInstance(item.route)
                             current = index
                         },
                         icon = {
@@ -103,6 +134,11 @@ fun AppNavigation(
             }
         }
     ) { contentPadding ->
-        AppNavHost(navControl, indexPage, modifier = Modifier.padding(contentPadding))
+        val currentBackStack by navControl.currentBackStack.collectAsState()
+        val highlightRoute = remember(currentBackStack) {
+            currentBackStack.getOrNull(1)?.destination?.route
+        }
+//        AppNavHost(navControl, indexPage, modifier = Modifier.padding(contentPadding))
+        AppNavHost(navControl, highlightRoute, modifier = Modifier.padding(contentPadding))
     }
 }
