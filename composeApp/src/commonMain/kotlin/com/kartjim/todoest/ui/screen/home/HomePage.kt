@@ -15,18 +15,22 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -53,108 +58,137 @@ fun HomePage(
     var expanded by remember { mutableStateOf(false) }
     val now by remember { mutableStateOf(getCurrentDate()) }
 
-    Column(
-        modifier = modifier
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet { /* Drawer content */ }
+        },
+        modifier = Modifier.fillMaxSize()
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = modifier
         ) {
-            Icon(
-                Icons.Filled.Menu,
-                contentDescription = "aside",
-                modifier = Modifier.padding(5.dp),
-            )
-            Column(
+            Row(
                 modifier =
                     Modifier
-                        .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                        .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text("今日代办")
-                Text(now.toString(), fontSize = 12.sp, color = Color.Gray)
-            }
-
-            Box {
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More options")
-                }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                Box(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    DropdownMenuItem(
-                        text = { Text("Option 1") },
-                        onClick = { /* Do something... */ },
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Option 2") },
-                        onClick = { /* Do something... */ },
-                    )
-                }
-            }
-        }
-
-        Box(
-            modifier = Modifier.fillMaxWidth().weight(1f)
-        ) {
-            Column(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-//                        .padding(10.dp),
-            ) {
-
-                val todos by viewModel.todos.collectAsState()
-                LazyColumn() {
-                    items(todos) { todo ->
-                        Column(
-                            modifier = Modifier.clickable(
-                                onClick = {
-
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
                                 }
-                            ).fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Checkbox(
-                                    checked = false,
-                                    onCheckedChange = {
-                                        viewModel.deleteTodo(todo)
-                                    }
-                                )
-                                Text(
-                                    text = todo.title
-                                )
                             }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Menu,
+                            contentDescription = "aside",
+                            modifier = Modifier.padding(5.dp)
+                        )
+                    }
+
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text("今日代办")
+                        Text(now.toString(), fontSize = 12.sp, color = Color.Gray)
+                    }
+
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd
+                    ) {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Option 1") },
+                                onClick = { /* Do something... */ },
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Option 2") },
+                                onClick = { /* Do something... */ },
+                            )
                         }
                     }
                 }
-
             }
 
             Box(
-                modifier = Modifier.fillMaxWidth()
-                    .align(Alignment.BottomEnd)
+                modifier = Modifier.fillMaxWidth().weight(1f)
             ) {
-                FloatingActionButton(
-                    onClick = {
-//                    TODO
-                        viewModel.addTodo()
-                    },
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+//                        .padding(10.dp),
                 ) {
-                    Icon(Icons.Filled.Add, "新增")
+
+                    val todos by viewModel.todos.collectAsState()
+                    LazyColumn() {
+                        items(todos) { todo ->
+                            Column(
+                                modifier = Modifier.clickable(
+                                    onClick = {
+
+                                    }
+                                ).fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Checkbox(
+                                        checked = false,
+                                        onCheckedChange = {
+                                            viewModel.deleteTodo(todo)
+                                        }
+                                    )
+                                    Text(
+                                        text = todo.title
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                        .align(Alignment.BottomEnd)
+                ) {
+                    FloatingActionButton(
+                        onClick = {
+//                    TODO
+                            viewModel.addTodo()
+                        },
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
+                    ) {
+                        Icon(Icons.Filled.Add, "新增")
+                    }
                 }
             }
+
+
         }
-
-
 
     }
 }

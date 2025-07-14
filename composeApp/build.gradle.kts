@@ -69,6 +69,9 @@ kotlin {
 
             implementation(libs.room.gradle.plugin)
             implementation(libs.room.runtime)
+
+//            implementation("androidx.compose.material3:material3:${material3_version}")
+            implementation("androidx.compose.material3:material3:1.4.0-alpha17")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
