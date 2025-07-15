@@ -7,6 +7,7 @@ import com.kartjim.todoest.data.api.TodoAPI
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -40,6 +41,7 @@ class HomeViewModel : ViewModel() {
 
     fun deleteTodo (todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {
+            delay(500)
             TodoAPI.deleteItem(todo)
         }
     }

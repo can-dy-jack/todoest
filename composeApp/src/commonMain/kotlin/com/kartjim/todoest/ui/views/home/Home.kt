@@ -163,7 +163,7 @@ fun Home(
                                 Column(
                                     modifier = Modifier.clickable(
                                         onClick = {
-
+                                            viewModel.deleteTodo(todo)
                                         }
                                     ).fillMaxWidth()
                                 ) {
@@ -176,7 +176,7 @@ fun Home(
                                             checked = false,
                                             onCheckedChange = {
                                                 viewModel.deleteTodo(todo)
-                                            }
+                                            },
                                         )
                                         androidx.compose.material3.Text(
                                             text = todo.title
