@@ -10,10 +10,9 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 
 // TODO
-class HomeViewPage : ViewModel() {
+class HomeViewModel : ViewModel() {
     val todos = TodoAPI.getTodos()
         .stateIn(
             scope = viewModelScope,
@@ -23,10 +22,11 @@ class HomeViewPage : ViewModel() {
 
     fun addTodo(
         // TODO
+        title: String,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             TodoAPI.addTodo(
-                "测试 - ${Clock.System.now().epochSeconds}",
+                title,
                 "",
                 0,
                 0,

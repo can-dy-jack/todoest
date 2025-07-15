@@ -29,7 +29,8 @@ fun Navigation(
         Routers.entries.forEach{ route ->
             IconButton(
                 onClick = {
-                    navControl.navigateSingleInstance(route.route)
+//                    navControl.navigateSingleInstance(route.route)
+                    navControl.navigate(route.route)
                 },
                 modifier = Modifier
                     .weight(1f)

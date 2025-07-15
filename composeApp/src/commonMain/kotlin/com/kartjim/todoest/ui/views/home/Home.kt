@@ -10,20 +10,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,11 +38,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
-import com.kartjim.todoest.ui.screen.home.AddModel
-import com.kartjim.todoest.ui.screen.home.HomeViewModel
-import com.kartjim.todoest.ui.screen.home.getCurrentDate
 import com.moriafly.salt.ui.Text
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+
+fun getCurrentDate(): LocalDate =
+    Clock.System
+        .now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date
 
 @Composable
 fun Home(
@@ -152,6 +159,7 @@ fun Home(
                         val todos by viewModel.todos.collectAsState()
                         LazyColumn() {
                             items(todos) { todo ->
+
                                 Column(
                                     modifier = Modifier.clickable(
                                         onClick = {
@@ -180,12 +188,17 @@ fun Home(
 
                     }
 
+                    fun add(title: String) {
+                        viewModel.addTodo(title)
+                    }
+
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .align(Alignment.BottomEnd)
                     ) {
                         AddModel(
                             modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
+                            onAdd = { title -> add(title) }
                         )
                     }
                 }
