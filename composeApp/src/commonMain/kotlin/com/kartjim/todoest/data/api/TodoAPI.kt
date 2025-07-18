@@ -4,11 +4,13 @@ import com.kartjim.todoest.data.AppDatabase
 import com.kartjim.todoest.data.Priority
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 object TodoAPI {
     private val todoDao = AppDatabase.getDatabase().todoDao()
 
+    @OptIn(ExperimentalTime::class)
     suspend fun addTodo(
         title: String,
         description: String,

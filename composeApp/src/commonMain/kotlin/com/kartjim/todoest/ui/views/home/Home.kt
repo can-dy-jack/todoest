@@ -48,11 +48,13 @@ import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 fun getCurrentDate(): LocalDate =
     Clock.System
         .now()

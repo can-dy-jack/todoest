@@ -2,11 +2,9 @@ package com.kartjim.todoest.ui.views.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,27 +15,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Accessibility
-import androidx.compose.material.icons.filled.ArrowCircleRight
-import androidx.compose.material.icons.filled.BorderRight
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Grid3x3
-import androidx.compose.material.icons.filled.Mode
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.SettingsApplications
-import androidx.compose.material.icons.filled.SettingsCell
-import androidx.compose.material.icons.filled.SwitchRight
-import androidx.compose.material.icons.filled.TurnRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
-import com.moriafly.salt.ui.Icon
-import com.moriafly.salt.ui.Text
 import org.jetbrains.compose.resources.painterResource
 import todoest.composeapp.generated.resources.Res
 import todoest.composeapp.generated.resources.compose_multiplatform
@@ -124,7 +113,7 @@ fun SettingsPage() {
                     Icon(
                         Icons.Filled.Grid3x3,
                         contentDescription = "",
-                        tint = Color.Blue
+//                        tint = Color.Blue
                     )
                     Text(
                         "选项",
@@ -157,7 +146,7 @@ fun SettingsPage() {
                                 Icon(
                                     Icons.Filled.Grid3x3,
                                     contentDescription = "",
-                                    tint = Color.Blue
+//                                    tint = Color.Blue
                                 )
                                 Text(
                                     "选项",
@@ -186,7 +175,7 @@ fun SettingsPage() {
                     Icon(
                         Icons.Filled.Grid3x3,
                         contentDescription = "",
-                        tint = Color.Blue
+//                        tint = Color.Blue
                     )
                     Text(
                         "选项",

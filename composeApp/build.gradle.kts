@@ -61,7 +61,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-            implementation("io.github.moriafly:salt-ui:2.5.0-alpha03")
+//            implementation("io.github.moriafly:salt-ui:2.5.0-alpha03")
             implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
             implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
@@ -72,6 +72,8 @@ kotlin {
 
 //            implementation("androidx.compose.material3:material3:${material3_version}")
             implementation("androidx.compose.material3:material3:1.4.0-alpha17")
+
+            implementation("com.kizitonwose.calendar:compose-multiplatform:2.8.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

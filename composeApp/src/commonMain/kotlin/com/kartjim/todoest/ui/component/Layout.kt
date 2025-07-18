@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.kartjim.todoest.ui.router.Routers
-import com.moriafly.salt.ui.ext.safeMain
 
 @Composable
 fun Layout(
@@ -23,7 +24,8 @@ fun Layout(
     Box(
         modifier = Modifier
             .windowInsetsPadding(
-                WindowInsets.safeMain.only(
+                WindowInsets.systemBars
+                .only(
                     WindowInsetsSides.Top + WindowInsetsSides.Horizontal
                 )
             )
@@ -43,7 +45,7 @@ fun Layout(
                 modifier = Modifier
                     .background(Color(242, 238, 243))
                     .windowInsetsPadding(
-                        WindowInsets.safeMain.only(
+                        WindowInsets.systemBars.only(
                             WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
                         )
                     )
