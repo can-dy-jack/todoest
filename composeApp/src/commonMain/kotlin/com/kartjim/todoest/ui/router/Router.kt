@@ -1,25 +1,26 @@
 package com.kartjim.todoest.ui.router
 
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dataset
 import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kartjim.todoest.ui.component.Navigation
-import com.kartjim.todoest.ui.screen.calendar.CalendarPage
-import com.kartjim.todoest.ui.screen.matrix.MatrixPage
-import com.kartjim.todoest.ui.screen.settings.SettingsPage
+import com.kartjim.todoest.ui.views.matrix.MatrixPage
+import com.kartjim.todoest.ui.views.settings.SettingsPage
 import com.kartjim.todoest.ui.views.calendar.Calendar
 import com.kartjim.todoest.ui.views.home.Home
 
@@ -39,20 +40,51 @@ enum class Routers (
 }
 
 @Composable
-fun AppNavHost (
+fun AppNavHost(
     navControl: NavHostController
 ) {
+    val animationSpec = spring<IntOffset>(
+        stiffness = 500f
+    )
 
     NavHost(
         navControl,
-        startDestination = "home"
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface),
+        startDestination = "home",
+//        enterTransition = {
+//            slideIn(
+//                animationSpec = animationSpec,
+//                initialOffset = {
+//                    IntOffset(x = 0, y = 150)
+//                }
+//            )
+//        },
+//        exitTransition = {
+//            fadeOut(
+//                animationSpec = spring(stiffness = 500f)
+//            )
+//        },
+//        popEnterTransition = {
+//            fadeIn(
+//                animationSpec = spring(stiffness = 500f)
+//            )
+//        },
+//        popExitTransition = {
+//            slideOut(
+//                animationSpec = animationSpec,
+//                targetOffset = {
+//                    IntOffset(x = 0, y = 150)
+//                }
+//            ) + fadeOut(
+//                animationSpec = spring(stiffness = 500f)
+//            )
+//        }
     ) {
         Routers.entries.forEach { item ->
             composable(item.route) {
                 when (item) {
-                    Routers.HOME -> Home(
-                        navControl
-                    )
+                    Routers.HOME -> Home()
                     Routers.Calendar -> Calendar(
                         navControl
                     )
@@ -84,11 +116,18 @@ fun NavController.navigateSingleInstance(route: String) {
     }
 }
 
+val LocalNavController = compositionLocalOf<NavController> {
+    error("Can not get NavController")
+}
+
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier
 ) {
-    val navControl = rememberNavController()
-
-    AppNavHost(navControl)
+    val navController = rememberNavController()
+    CompositionLocalProvider(
+        LocalNavController provides navController
+    ) {
+        AppNavHost(navController)
+    }
 }

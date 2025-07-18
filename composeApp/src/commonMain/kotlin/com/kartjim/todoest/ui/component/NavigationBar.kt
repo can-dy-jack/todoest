@@ -1,36 +1,29 @@
 package com.kartjim.todoest.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
+import com.kartjim.todoest.ui.router.LocalNavController
 import com.kartjim.todoest.ui.router.Routers
 import com.kartjim.todoest.ui.router.navigateSingleInstance
 
 @Composable
-fun Navigation(
-    navControl: NavHostController,
+fun NavigationBar(
     current: Routers
 ) {
-
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
+        val navController = LocalNavController.current
         Routers.entries.forEach{ route ->
             IconButton(
                 onClick = {
-//                    navControl.navigateSingleInstance(route.route)
-                    navControl.navigate(route.route)
+                    navController.navigateSingleInstance(route.route)
+                    // navController.navigate(route.route)
                 },
                 modifier = Modifier
                     .weight(1f)

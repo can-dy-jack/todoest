@@ -1,6 +1,8 @@
 package com.kartjim.todoest.ui.views.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +20,16 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,7 +46,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
-import com.moriafly.salt.ui.Text
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -54,7 +61,6 @@ fun getCurrentDate(): LocalDate =
 
 @Composable
 fun Home(
-    navControl: NavHostController,
     viewModel: HomeViewModel = viewModel { HomeViewModel() },
     modifier: Modifier = Modifier,
 ) {
@@ -68,14 +74,13 @@ fun Home(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Text("xxxx")
+                Aside()
             }
         },
         modifier = Modifier.fillMaxSize()
     ) {
 
         Layout(
-            navControl = navControl,
             current = Routers.HOME,
         ) {
             Column(
@@ -112,12 +117,15 @@ fun Home(
                                     .fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
-                            androidx.compose.material3.Text("今日代办")
-                            androidx.compose.material3.Text(
-                                now.toString(),
-                                fontSize = 12.sp,
-                                color = Color.Gray
-                            )
+
+                                Text(
+                                    "今日代办"
+                                )
+//                            Text(
+//                                now.toString(),
+//                                fontSize = 12.sp,
+//                                color = Color.Gray
+//                            )
                         }
 
                         Box (
@@ -158,14 +166,15 @@ fun Home(
 
                         val todos by viewModel.todos.collectAsState()
                         LazyColumn() {
-                            items(todos) { todo ->
-
+                            items(
+                                todos,
+                                key = { it.id }
+                            ) { todo ->
+                                var checked = remember { mutableStateOf(false)}
                                 Column(
-                                    modifier = Modifier.clickable(
-                                        onClick = {
-                                            viewModel.deleteTodo(todo)
-                                        }
-                                    ).fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateItem()
                                 ) {
                                     Row(
                                         modifier = Modifier
@@ -173,12 +182,13 @@ fun Home(
                                         verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Checkbox(
-                                            checked = false,
+                                            checked = checked.value,
                                             onCheckedChange = {
+                                                checked.value = true
                                                 viewModel.deleteTodo(todo)
                                             },
                                         )
-                                        androidx.compose.material3.Text(
+                                        Text(
                                             text = todo.title
                                         )
                                     }

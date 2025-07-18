@@ -5,6 +5,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 
 private val lightScheme = lightColorScheme(
@@ -254,6 +255,10 @@ fun AppTheme(
     dynamicColor: Boolean = true,
     content: @Composable() () -> Unit
 ) {
+    LaunchedEffect(darkTheme) {
+        println("darkTheme = $darkTheme")
+    }
+
   val colorScheme = when {
       darkTheme -> darkScheme
       else -> lightScheme

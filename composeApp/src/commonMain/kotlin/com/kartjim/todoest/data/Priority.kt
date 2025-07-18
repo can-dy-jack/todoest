@@ -6,3 +6,4 @@ enum class Priority(val type: Int) {
     NOT_EMERGENCY_IMPORTANT(3),
     EMERGENCY_IMPORTANT(4)
 }
+

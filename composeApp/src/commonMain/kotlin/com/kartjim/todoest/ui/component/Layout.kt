@@ -12,13 +12,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavHostController
 import com.kartjim.todoest.ui.router.Routers
 import com.moriafly.salt.ui.ext.safeMain
 
 @Composable
 fun Layout(
-    navControl: NavHostController,
     current: Routers,
     content: @Composable (() -> Unit)
 ) {
@@ -51,7 +49,7 @@ fun Layout(
                     )
 
             ) {
-                Navigation(navControl,current)
+                NavigationBar(current)
             }
         }
     }
