@@ -170,7 +170,13 @@ fun Home(
                                 todos,
                                 key = { it.id }
                             ) { todo ->
-                                var checked = remember { mutableStateOf(false)}
+                                val checked = remember { mutableStateOf(todo.completed)}
+                                fun checkItem() {
+                                    val cur = !checked.value
+                                    checked.value = cur
+                                    viewModel.checkTodo(cur, todo)
+                                }
+
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -178,15 +184,15 @@ fun Home(
                                 ) {
                                     Row(
                                         modifier = Modifier
-                                            .fillMaxWidth(),
+                                            .fillMaxWidth()
+                                            .clickable(
+                                                onClick = { checkItem() }
+                                            ),
                                         verticalAlignment = Alignment.CenterVertically,
                                     ) {
                                         Checkbox(
                                             checked = checked.value,
-                                            onCheckedChange = {
-                                                checked.value = true
-                                                viewModel.deleteTodo(todo)
-                                            },
+                                            onCheckedChange = { checkItem() },
                                         )
                                         Text(
                                             text = todo.title

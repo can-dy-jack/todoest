@@ -41,4 +41,20 @@ object TodoAPI {
     suspend fun deleteItem(todo: Todo) {
         todoDao.deleteTodo(todo)
     }
+
+    suspend fun updateTodo(
+        todo: Todo
+//        title: String,
+//        description: String,
+//        completed: Boolean,
+//        startTime: Long,
+//        endTime: Long,
+//        updatedAt: Long,
+//        isExpirationWarn: Boolean,
+//        priority: Priority,
+//        groupId: Int,
+//        areaId: Int
+    ) {
+        todoDao.updateTodo(todo)
+    }
 }

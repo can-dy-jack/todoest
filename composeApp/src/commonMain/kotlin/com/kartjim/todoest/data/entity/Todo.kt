@@ -8,16 +8,16 @@ import com.kartjim.todoest.data.Priority
 data class Todo(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val title: String,
-    val description: String,
-    val completed: Boolean,
-    val startTime: Long,
-    val endTime: Long,
+    var title: String,
+    var description: String,
+    var completed: Boolean,
+    var startTime: Long,
+    var endTime: Long,
     val createdAt: Long,
-    val updatedAt: Long,
-    val isExpirationWarn: Boolean,
-    val priority: Priority = Priority.NOT_EMERGENCY_NOT_IMPORTANT,
+    var updatedAt: Long,
+    var isExpirationWarn: Boolean,
+    var priority: Priority = Priority.NOT_EMERGENCY_NOT_IMPORTANT,
 
-    val groupId: Int,
-    val areaId: Int,
+    var groupId: Int,
+    var areaId: Int,
 )
