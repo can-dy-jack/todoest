@@ -40,6 +40,8 @@ object TodoAPI {
 
     fun getTodos(): Flow<List<Todo>> = todoDao.getTodos()
 
+    fun getTodosByDate(date: Long): Flow<List<Todo>> = todoDao.getTodosByDate(date)
+
     suspend fun deleteItem(todo: Todo) {
         todoDao.deleteTodo(todo)
     }

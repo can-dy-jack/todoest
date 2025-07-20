@@ -85,9 +85,7 @@ fun AppNavHost(
             composable(item.route) {
                 when (item) {
                     Routers.HOME -> Home()
-                    Routers.Calendar -> Calendar(
-                        navControl
-                    )
+                    Routers.Calendar -> Calendar()
                     Routers.FourD -> MatrixPage()
                     Routers.Setting -> SettingsPage()
                 }

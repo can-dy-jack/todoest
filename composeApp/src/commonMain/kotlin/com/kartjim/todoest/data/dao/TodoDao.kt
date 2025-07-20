@@ -24,4 +24,7 @@ interface TodoDao {
 
     @Query("select * from Todo")
     fun getTodos(): Flow<List<Todo>>
+
+    @Query("Select * from Todo where startTime = :date")
+    fun getTodosByDate(date: Long): Flow<List<Todo>>
 }

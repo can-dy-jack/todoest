@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-// TODO
 class HomeViewModel : ViewModel() {
     val todos = TodoAPI.getTodos()
         .stateIn(

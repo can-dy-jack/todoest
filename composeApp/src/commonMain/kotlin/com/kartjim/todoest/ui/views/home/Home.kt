@@ -197,7 +197,7 @@ fun Home(
                                             onCheckedChange = { checkItem() },
                                         )
                                         Text(
-                                            text = todo.title
+                                            text = todo.title + todo.description + todo.startTime
                                         )
                                     }
                                 }
