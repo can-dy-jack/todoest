@@ -206,17 +206,12 @@ fun Home(
 
                     }
 
-                    fun add(title: String) {
-                        viewModel.addTodo(title)
-                    }
-
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .align(Alignment.BottomEnd)
                     ) {
                         AddModel(
-                            modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp),
-                            onAdd = { title -> add(title) }
+                            modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp)
                         )
                     }
                 }

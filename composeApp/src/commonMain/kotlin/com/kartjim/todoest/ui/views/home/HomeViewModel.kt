@@ -22,17 +22,20 @@ class HomeViewModel : ViewModel() {
         )
 
     fun addTodo(
-        // TODO
         title: String,
+        description: String,
+        startTime: Long,
+        endTime: Long,
+        priority: Priority = Priority.NOT_EMERGENCY_NOT_IMPORTANT
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             TodoAPI.addTodo(
                 title,
-                "",
-                0,
-                0,
+                description,
+                startTime,
+                endTime,
                 false,
-                Priority.NOT_EMERGENCY_NOT_IMPORTANT,
+                priority,
                 -1,
                 -1
             )
