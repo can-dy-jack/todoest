@@ -43,43 +43,11 @@ enum class Routers (
 fun AppNavHost(
     navControl: NavHostController
 ) {
-    val animationSpec = spring<IntOffset>(
-        stiffness = 500f
-    )
-
     NavHost(
         navControl,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface),
         startDestination = "home",
-//        enterTransition = {
-//            slideIn(
-//                animationSpec = animationSpec,
-//                initialOffset = {
-//                    IntOffset(x = 0, y = 150)
-//                }
-//            )
-//        },
-//        exitTransition = {
-//            fadeOut(
-//                animationSpec = spring(stiffness = 500f)
-//            )
-//        },
-//        popEnterTransition = {
-//            fadeIn(
-//                animationSpec = spring(stiffness = 500f)
-//            )
-//        },
-//        popExitTransition = {
-//            slideOut(
-//                animationSpec = animationSpec,
-//                targetOffset = {
-//                    IntOffset(x = 0, y = 150)
-//                }
-//            ) + fadeOut(
-//                animationSpec = spring(stiffness = 500f)
-//            )
-//        }
     ) {
         Routers.entries.forEach { item ->
             composable(item.route) {
@@ -96,8 +64,6 @@ fun AppNavHost(
 
 fun NavController.navigateSingleInstance(route: String) {
     val currentBackStack = currentBackStack.value
-    // index 0 destination=NavGraph
-    // index 1 destination=Destination (start)
     if (currentBackStack.size > 2) {
         repeat(currentBackStack.size - 2) {
             popBackStack()

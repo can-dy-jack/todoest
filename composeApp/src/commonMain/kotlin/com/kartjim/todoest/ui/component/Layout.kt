@@ -49,7 +49,6 @@ fun Layout(
                             WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
                         )
                     )
-
             ) {
                 NavigationBar(current)
             }

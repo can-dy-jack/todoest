@@ -155,7 +155,7 @@ fun AddModel(
                     )
                 )
 
-                Row (
+                Row(
                     modifier = Modifier
                         .fillMaxWidth(),
 //                    contentAlignment = Alignment.CenterEnd
@@ -248,7 +248,7 @@ fun AddModel(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text("重要但不紧急", color =  Color.Magenta) },
+                                text = { Text("重要但不紧急", color = Color.Magenta) },
                                 onClick = {
                                     priority.value = Priority.NOT_EMERGENCY_IMPORTANT
                                     expanded = false

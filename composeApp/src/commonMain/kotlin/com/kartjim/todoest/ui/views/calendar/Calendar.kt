@@ -1,16 +1,25 @@
 package com.kartjim.todoest.ui.views.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ShapeDefaults
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -96,6 +105,7 @@ fun Calendar(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun Day(day: CalendarDay, now: Long) {
     Box(
@@ -103,15 +113,40 @@ fun Day(day: CalendarDay, now: Long) {
             .aspectRatio(1f), // This is important for square sizing!
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = day.date.day.toString(),
-            color = if (now == dateToTimestamp(day.date.year, day.date.month, day.date.day))
-                Color.Blue
-            else if (day.position == DayPosition.MonthDate)
-                Color.DarkGray
-            else
-                Color.Gray
-        )
+        if (now == dateToTimestamp(day.date.year, day.date.month, day.date.day)) {
+
+            Box(
+                modifier = Modifier.fillMaxSize().padding(5.dp)
+                    .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = day.date.day.toString(),
+                    color = Color.White,
+                )
+            }
+
+        } else {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                TextButton(
+                    onClick = {
+
+                    },
+                    modifier = Modifier.fillMaxHeight().aspectRatio(1f),
+                ) {
+                    Text(
+                        text = "${day.date.day}",
+                        color = if (day.position == DayPosition.MonthDate)
+                            Color.DarkGray
+                        else
+                            Color.Gray
+                    )
+                }
+            }
+        }
+
     }
 }
 

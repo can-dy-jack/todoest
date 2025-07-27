@@ -120,23 +120,26 @@ fun Home(
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
 
-                                Text(
-                                    "今日代办"
-                                )
-//                            Text(
-//                                now.toString(),
-//                                fontSize = 12.sp,
-//                                color = Color.Gray
-//                            )
+                            Text(
+                                "今日代办"
+                            )
+                            Text(
+                                now.toString(),
+                                fontSize = 12.sp,
+                                color = Color.Gray
+                            )
                         }
 
-                        Box (
+                        Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             Row {
                                 IconButton(onClick = { expanded = !expanded }) {
-                                    Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                                    Icon(
+                                        Icons.Default.MoreVert,
+                                        contentDescription = "More options"
+                                    )
                                 }
                                 DropdownMenu(
                                     expanded = expanded,
@@ -172,7 +175,7 @@ fun Home(
                                 todos,
                                 key = { it.id }
                             ) { todo ->
-                                val checked = remember { mutableStateOf(todo.completed)}
+                                val checked = remember { mutableStateOf(todo.completed) }
                                 fun checkItem() {
                                     val cur = !checked.value
                                     checked.value = cur
@@ -197,7 +200,7 @@ fun Home(
                                             onCheckedChange = { checkItem() },
                                         )
                                         Text(
-                                            text = todo.title + todo.description + todo.startTime
+                                            text = todo.title
                                         )
                                     }
                                 }
