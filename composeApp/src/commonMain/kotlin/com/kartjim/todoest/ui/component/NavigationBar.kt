@@ -41,10 +41,13 @@ fun NavigationBar(
                 ) {
                     Box(
                         modifier = Modifier.fillMaxSize()
+//                            .padding(5.dp)
                             .background(color = if (current.route == route.route)
-                                Color(130,130,130, 30)
+//                                Color(130,130,130, 30)
+                                MaterialTheme.colorScheme.onSecondary
                             else
-                                Color.Transparent)
+                                Color.Transparent
+                            )
                             .padding(10.dp)
                     ) {
 
@@ -55,7 +58,7 @@ fun NavigationBar(
                         tint = if (current.route == route.route)
                             MaterialTheme.colorScheme.primary
                         else
-                            Color.DarkGray
+                            MaterialTheme.colorScheme.surface
                     )
                 }
             }

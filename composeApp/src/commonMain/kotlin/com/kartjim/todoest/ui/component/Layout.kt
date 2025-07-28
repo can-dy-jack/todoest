@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +44,10 @@ fun Layout(
 
             Box(
                 modifier = Modifier
-                    .background(Color(242, 238, 243))
+                    .background(
+                        //Color(242, 238, 243)
+                        MaterialTheme.colorScheme.secondaryContainer
+                    )
                     .windowInsetsPadding(
                         WindowInsets.systemBars.only(
                             WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal

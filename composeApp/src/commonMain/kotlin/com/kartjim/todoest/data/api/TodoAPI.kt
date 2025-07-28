@@ -4,6 +4,7 @@ import com.kartjim.todoest.data.AppDatabase
 import com.kartjim.todoest.data.Priority
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.stateIn
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -60,5 +61,9 @@ object TodoAPI {
 //        areaId: Int
     ) {
         todoDao.updateTodo(todo)
+    }
+
+    fun getTodoSize(startTime: Long, endTime: Long): Flow<Int> {
+        return todoDao.getTodoSize(startTime, endTime)
     }
 }

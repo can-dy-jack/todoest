@@ -27,4 +27,7 @@ interface TodoDao {
 
     @Query("Select * from Todo where startTime = :date")
     fun getTodosByDate(date: Long): Flow<List<Todo>>
+
+    @Query("Select count(*) as count from Todo where startTime >= :startDate and startTime < :endDate")
+    fun getTodoSize(startDate: Long, endDate: Long): Flow<Int>
 }
