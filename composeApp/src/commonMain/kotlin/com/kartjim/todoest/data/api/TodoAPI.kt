@@ -41,6 +41,8 @@ object TodoAPI {
 
     fun getTodos(): Flow<List<Todo>> = todoDao.getTodos()
 
+    fun getTodosByPriority(priority: Priority): Flow<List<Todo>> = todoDao.getTodosByPriority(priority)
+
     fun getTodosByDate(date: Long): Flow<List<Todo>> = todoDao.getTodosByDate(date)
 
     suspend fun deleteItem(todo: Todo) {

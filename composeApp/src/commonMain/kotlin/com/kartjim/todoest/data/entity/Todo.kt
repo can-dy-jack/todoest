@@ -16,6 +16,8 @@ data class Todo(
     val createdAt: Long,
     var updatedAt: Long,
     var isExpirationWarn: Boolean,
+
+    // TODO 类型有问题
     var priority: Priority = Priority.NOT_EMERGENCY_NOT_IMPORTANT,
 
     var groupId: Int,
