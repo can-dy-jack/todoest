@@ -35,9 +35,7 @@ fun Layout(
             modifier  = Modifier.fillMaxSize()
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
             ) {
                 content()
             }
@@ -45,12 +43,12 @@ fun Layout(
             Box(
                 modifier = Modifier
                     .background(
-                        //Color(242, 238, 243)
-                        MaterialTheme.colorScheme.secondaryContainer
+//                        MaterialTheme.colorScheme.secondaryContainer
+                        color = Color.Transparent
                     )
                     .windowInsetsPadding(
                         WindowInsets.systemBars.only(
-                            WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal
+                            WindowInsetsSides.Bottom
                         )
                     )
             ) {

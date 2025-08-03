@@ -74,6 +74,7 @@ kotlin {
             implementation("androidx.compose.material3:material3:1.4.0-alpha17")
 
             implementation("com.kizitonwose.calendar:compose-multiplatform:2.8.0")
+            implementation("dev.chrisbanes.haze:haze-materials:1.6.9")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
