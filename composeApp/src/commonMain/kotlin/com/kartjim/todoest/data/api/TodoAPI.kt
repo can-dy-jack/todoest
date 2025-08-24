@@ -32,7 +32,7 @@ object TodoAPI {
                 createdAt = Clock.System.now().epochSeconds,
                 updatedAt = 0,
                 isExpirationWarn = isExpirationWarn,
-                priority = priority,
+                priority = priority.ordinal,
                 groupId = groupId,
                 areaId = areaId
             )
@@ -41,7 +41,7 @@ object TodoAPI {
 
     fun getTodos(): Flow<List<Todo>> = todoDao.getTodos()
 
-    fun getTodosByPriority(priority: Priority): Flow<List<Todo>> = todoDao.getTodosByPriority(priority)
+    fun getTodosByPriority(priority: Priority): Flow<List<Todo>> = todoDao.getTodosByPriority(priority.ordinal)
 
     fun getTodosByDate(date: Long): Flow<List<Todo>> = todoDao.getTodosByDate(date)
 

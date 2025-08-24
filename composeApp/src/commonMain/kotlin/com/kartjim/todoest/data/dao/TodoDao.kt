@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.kartjim.todoest.data.Priority
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.flow.Flow
 
@@ -27,7 +26,7 @@ interface TodoDao {
     fun getTodos(): Flow<List<Todo>>
 
     @Query("select * from Todo where priority = :priority")
-    fun getTodosByPriority(priority: Priority): Flow<List<Todo>>
+    fun getTodosByPriority(priority: Int): Flow<List<Todo>>
 
     @Query("Select * from Todo where startTime = :date")
     fun getTodosByDate(date: Long): Flow<List<Todo>>

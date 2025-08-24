@@ -23,10 +23,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,17 +37,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kartjim.todoest.ui.component.Empty
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
@@ -79,7 +85,18 @@ fun Calendar(
             firstDayOfWeek = daysOfWeek.first()
         )
 
-        // TODO 当前选中的日期
+        var currentVisibleMonth by remember { mutableStateOf<CalendarMonth?>(null) }
+        LaunchedEffect(state) {
+            snapshotFlow {
+                // 获取当前第一个可见的月份
+                state.layoutInfo.visibleMonthsInfo.firstOrNull()?.month
+            }.distinctUntilChanged().collect { month ->
+                month?.let {
+                    currentVisibleMonth = it
+                }
+            }
+        }
+
         val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val now = dateToTimestamp(date.year, date.month, date.day);
 
@@ -91,7 +108,10 @@ fun Calendar(
                 modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)
             ) {
 
-                Text("x月", fontSize = 20.sp) // FIXME
+                Text(
+                    "${currentVisibleMonth?.yearMonth?.year} 年 ${currentVisibleMonth?.yearMonth?.month?.number} 月",
+                    fontSize = 20.sp
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
                     Icons.Default.MoreVert,
@@ -105,22 +125,26 @@ fun Calendar(
                     Day(it, current.value, viewModel, changeCurrent = {
                         current.value = it;
                     })
-                }
+                },
             )
 
-            // TODO 抽离出来 - 防止这里数据变化渲染导致整个页面渲染
-            LazyColumn(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .background(MaterialTheme.colorScheme.secondaryContainer)
-                    .padding(10.dp)
-                    .fillMaxSize()
-            ) {
-                items(todos, key = { it.id }) { todo ->
-                    Row {
-                        Text(
-                            todo.title,
-                        )
+            if (todos.isEmpty()) {
+                Empty()
+            } else {
+                // TODO 抽离出来 - 防止这里数据变化渲染导致整个页面渲染
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .padding(10.dp)
+                        .fillMaxWidth()
+                ) {
+                    items(todos, key = { it.id }) { todo ->
+                        Row {
+                            Text(
+                                todo.title,
+                            )
+                        }
                     }
                 }
             }

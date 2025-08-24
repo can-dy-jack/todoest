@@ -17,8 +17,7 @@ data class Todo(
     var updatedAt: Long,
     var isExpirationWarn: Boolean,
 
-    // TODO 类型有问题
-    var priority: Priority = Priority.NOT_EMERGENCY_NOT_IMPORTANT,
+    var priority: Int = Priority.NOT_EMERGENCY_NOT_IMPORTANT.ordinal,
 
     var groupId: Int,
     var areaId: Int,

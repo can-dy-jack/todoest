@@ -281,6 +281,7 @@ fun AddModel(
                                     description = description.text.toString(),
                                     startTime = startTime.value,
                                     endTime = endTime.value,
+                                    priority = priority.value,
                                 )
                                 showBottomSheet = false
                             }
