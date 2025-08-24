@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.kartjim.todoest.ui.component.Layout
+import com.kartjim.todoest.ui.component.todo.TodoItem
 import com.kartjim.todoest.ui.router.Routers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -175,34 +176,12 @@ fun Home(
                                 todos,
                                 key = { it.id }
                             ) { todo ->
-                                val checked = remember { mutableStateOf(todo.completed) }
-                                fun checkItem() {
-                                    val cur = !checked.value
-                                    checked.value = cur
-                                    viewModel.checkTodo(cur, todo)
-                                }
-
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .animateItem()
                                 ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clickable(
-                                                onClick = { checkItem() }
-                                            ),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Checkbox(
-                                            checked = checked.value,
-                                            onCheckedChange = { checkItem() },
-                                        )
-                                        Text(
-                                            text = todo.title + todo.priority
-                                        )
-                                    }
+                                    TodoItem(todo)
                                 }
                             }
                         }

@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kartjim.todoest.ui.component.Empty
 import com.kartjim.todoest.ui.component.Layout
+import com.kartjim.todoest.ui.component.todo.TodoItem
 import com.kartjim.todoest.ui.router.Routers
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -136,15 +137,10 @@ fun Calendar(
                     modifier = Modifier
                         .padding(10.dp)
                         .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .padding(10.dp)
                         .fillMaxWidth()
                 ) {
                     items(todos, key = { it.id }) { todo ->
-                        Row {
-                            Text(
-                                todo.title,
-                            )
-                        }
+                        TodoItem(todo)
                     }
                 }
             }
