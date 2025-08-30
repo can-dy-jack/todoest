@@ -6,11 +6,13 @@ import com.kartjim.todoest.data.api.TodoAPI
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TodoViewModel: ViewModel() {
     fun checkTodo(isComplete: Boolean, todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {
+            delay(2000)
             val newTodo = todo.copy()
             newTodo.completed = isComplete;
             TodoAPI.updateTodo(newTodo);

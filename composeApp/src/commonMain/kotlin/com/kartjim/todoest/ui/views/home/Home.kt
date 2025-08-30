@@ -1,8 +1,10 @@
 package com.kartjim.todoest.ui.views.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,11 +13,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
@@ -30,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,6 +67,9 @@ fun Home(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val showCompleted = viewModel.showCompleted.collectAsState()
+    val completedTodoLen = viewModel.completedTodoLen.collectAsState()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -136,12 +145,14 @@ fun Home(
                                     onDismissRequest = { expanded = false },
                                 ) {
                                     DropdownMenuItem(
-                                        text = { androidx.compose.material3.Text("Option 1") },
-                                        onClick = { /* Do something... */ },
-                                    )
-                                    DropdownMenuItem(
-                                        text = { androidx.compose.material3.Text("Option 2") },
-                                        onClick = { /* Do something... */ },
+                                        text = {
+                                            Text(
+                                            if (!showCompleted.value) "显示已完成的任务"
+                                            else "隐藏已完成的任务"
+                                        )},
+                                        onClick = {
+                                            viewModel.changeShowCompleted(!showCompleted.value)
+                                        },
                                     )
                                 }
                             }
@@ -161,7 +172,7 @@ fun Home(
                         var showEditDialog by remember { mutableStateOf(false) }
                         var currentTodo by remember { mutableStateOf<Todo?>(null) }
                         val todos by viewModel.todos.collectAsState()
-                        LazyColumn() {
+                        LazyColumn {
                             items(
                                 todos,
                                 key = { it.id }
@@ -175,6 +186,32 @@ fun Home(
                                         currentTodo = it
                                         showEditDialog = true
                                     })
+                                }
+                            }
+
+                            if (!showCompleted.value) {
+                                item{
+                                    Row(
+                                        modifier = modifier.padding(horizontal = 32.dp, vertical = 10.dp).fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Center,
+                                    ) {
+                                        HorizontalDivider(
+                                            modifier = Modifier.weight(1f),
+                                        )
+
+                                        Text(
+                                            text = "已隐藏 ${completedTodoLen.value} 个完成的任务",
+                                            modifier = Modifier.padding(horizontal = 8.dp),
+                                            textAlign = TextAlign.Center,
+                                            fontSize = 12.sp,
+                                            color = Color.Gray
+                                        )
+
+                                        HorizontalDivider(
+                                            modifier = Modifier.weight(1f),
+                                        )
+                                    }
                                 }
                             }
                         }

@@ -1,5 +1,6 @@
 package com.kartjim.todoest.ui.views.home
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kartjim.todoest.data.Priority
@@ -15,7 +16,10 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
     private val _todos = MutableStateFlow<List<Todo>>(emptyList())
+    private val _completedTodoLen = MutableStateFlow(0)
+
     val todos = _todos.asStateFlow()
+    val completedTodoLen = _completedTodoLen.asStateFlow()
 
     init {
         loadTodos()
@@ -24,7 +28,8 @@ class HomeViewModel : ViewModel() {
     private fun loadTodos() {
         viewModelScope.launch(Dispatchers.IO) {
             TodoAPI.getTodos().collectLatest { todoList ->
-                _todos.value = todoList
+                _todos.value = todoList.filter { item -> if (_showCompleted.value) true else !item.completed }
+                _completedTodoLen.value = todoList.filter { item -> item.completed }.size
             }
         }
     }
@@ -80,6 +85,15 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             delay(500)
             TodoAPI.deleteItem(todo)
+        }
+    }
+
+    private var _showCompleted = MutableStateFlow(false)
+    val showCompleted = _showCompleted.asStateFlow()
+    fun changeShowCompleted(show: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _showCompleted.value = show
+            loadTodos()
         }
     }
 }
