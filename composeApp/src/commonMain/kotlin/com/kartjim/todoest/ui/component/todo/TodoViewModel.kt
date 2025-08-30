@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 class TodoViewModel: ViewModel() {
     fun checkTodo(isComplete: Boolean, todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {
-            todo.completed = isComplete;
-            TodoAPI.updateTodo(todo);
+            val newTodo = todo.copy()
+            newTodo.completed = isComplete;
+            TodoAPI.updateTodo(newTodo);
         }
     }
 }

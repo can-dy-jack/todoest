@@ -17,6 +17,7 @@ import com.kartjim.todoest.data.entity.Todo
 @Composable
 fun TodoItem(
     todo: Todo,
+    onItemClick: (todo: Todo) -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: TodoViewModel = viewModel { TodoViewModel() },
 ) {
@@ -31,7 +32,9 @@ fun TodoItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
-                onClick = { checkItem() }
+                onClick = {
+                    onItemClick(todo)
+                }
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {

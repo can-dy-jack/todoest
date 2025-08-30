@@ -13,12 +13,12 @@ data class Todo(
     var completed: Boolean,
     var startTime: Long,
     var endTime: Long,
-    val createdAt: Long,
-    var updatedAt: Long,
-    var isExpirationWarn: Boolean,
+    val createdAt: Long?,
+    var updatedAt: Long?,
+    var isExpirationWarn: Boolean?,
 
-    var priority: Int = Priority.NOT_EMERGENCY_NOT_IMPORTANT.ordinal,
+    var priority: Int = Priority.NOT_EMERGENCY_NOT_IMPORTANT.type,
 
-    var groupId: Int,
-    var areaId: Int,
+    var groupId: Int?,
+    var areaId: Int?,
 )

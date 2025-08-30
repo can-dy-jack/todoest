@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -37,9 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kartjim.todoest.ui.component.Empty
 import com.kartjim.todoest.ui.component.Layout
-import com.kartjim.todoest.ui.component.todo.TodoItem
 import com.kartjim.todoest.ui.router.Routers
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -60,15 +56,14 @@ import kotlinx.datetime.YearMonth
 import kotlinx.datetime.number
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 @Composable
 fun Calendar(
-    viewModel: CalendarViewModel = viewModel { CalendarViewModel() },
     modifier: Modifier = Modifier,
+    viewModel: CalendarViewModel = viewModel { CalendarViewModel() },
 ) {
     Layout(
         current = Routers.Calendar,
@@ -98,11 +93,8 @@ fun Calendar(
             }
         }
 
-        val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val now = dateToTimestamp(date.year, date.month, date.day);
-
-        val current = remember { mutableStateOf(now) }
-        val todos by viewModel.getTodos(current.value).collectAsState()
+        val timestamp by viewModel.timestamp.collectAsState()
+        val todos by viewModel.todos.collectAsState()
 
         Column {
             Row(
@@ -123,36 +115,30 @@ fun Calendar(
             HorizontalCalendar(
                 state = state,
                 dayContent = { it ->
-                    Day(it, current.value, viewModel, changeCurrent = {
-                        current.value = it;
-                    })
-                },
+                    Day(
+                        changeCurrent = {
+                            viewModel.updateTimestamp(it)
+                        },
+                        day = it,
+                        current = timestamp,
+                        size = 0
+                    )
+                }
             )
 
-            if (todos.isEmpty()) {
-                Empty()
-            } else {
-                // TODO 抽离出来 - 防止这里数据变化渲染导致整个页面渲染
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .fillMaxWidth()
-                ) {
-                    items(todos, key = { it.id }) { todo ->
-                        TodoItem(todo)
-                    }
-                }
-            }
+            DayTodos(todos)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun Day(day: CalendarDay, current: Long, viewModel: CalendarViewModel, changeCurrent: (date: Long) -> Unit) {
-    val size = viewModel.getTodoSize(day.date.year, day.date.month, day.date.day).collectAsState()
-
+fun Day(
+    changeCurrent: (date: Long) -> Unit,
+    day: CalendarDay,
+    current: Long,
+    size: Int
+) {
     val dayTime = dateToTimestamp(day.date.year, day.date.month, day.date.day);
 
     Box(
@@ -176,7 +162,7 @@ fun Day(day: CalendarDay, current: Long, viewModel: CalendarViewModel, changeCur
                         text = day.date.day.toString(),
                         color = Color.White,
                     )
-                    if (size.value > 0) {
+                    if (size > 0) {
                         Row(
                             modifier = Modifier.height(2.dp).width(18.dp)
                                 .background(color = Color.White)
@@ -210,7 +196,7 @@ fun Day(day: CalendarDay, current: Long, viewModel: CalendarViewModel, changeCur
                                 fontSize = 16.sp
                             )
                         }
-                        if (size.value > 0) {
+                        if (size > 0) {
                             Row(
                                 modifier = Modifier.height(2.dp).width(18.dp)
                                     .background(color = MaterialTheme.colorScheme.primary)

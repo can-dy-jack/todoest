@@ -11,7 +11,7 @@ import kotlin.concurrent.Volatile
 
 @Database(
     entities = [Todo::class],
-    version = 3,
+    version = 4,
 //    autoMigrations = [AutoMigration (from = 2, to = 3)]
 )
 //@ConstructedBy(AppDatabaseConstructor::class)

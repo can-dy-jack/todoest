@@ -1,8 +1,5 @@
 package com.kartjim.todoest.ui.views.home
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,23 +11,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,11 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import com.kartjim.todoest.data.entity.Todo
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.component.todo.TodoItem
 import com.kartjim.todoest.ui.router.Routers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -169,7 +158,8 @@ fun Home(
                                 .fillMaxSize()
 //                        .padding(10.dp),
                     ) {
-
+                        var showEditDialog by remember { mutableStateOf(false) }
+                        var currentTodo by remember { mutableStateOf<Todo?>(null) }
                         val todos by viewModel.todos.collectAsState()
                         LazyColumn() {
                             items(
@@ -181,11 +171,18 @@ fun Home(
                                         .fillMaxWidth()
                                         .animateItem()
                                 ) {
-                                    TodoItem(todo)
+                                    TodoItem(todo, onItemClick={it ->
+                                        currentTodo = it
+                                        showEditDialog = true
+                                    })
                                 }
                             }
                         }
-
+                        EditModel(
+                            showEditDialog,
+                            currentTodo,
+                            onDismiss = { showEditDialog = false; },
+                        )
                     }
 
                     Box(
@@ -193,6 +190,7 @@ fun Home(
                             .align(Alignment.BottomEnd)
                     ) {
                         AddModel(
+                            viewModel,
                             modifier = Modifier.align(Alignment.BottomEnd).padding(15.dp)
                         )
                     }

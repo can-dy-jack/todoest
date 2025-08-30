@@ -32,7 +32,7 @@ object TodoAPI {
                 createdAt = Clock.System.now().epochSeconds,
                 updatedAt = 0,
                 isExpirationWarn = isExpirationWarn,
-                priority = priority.ordinal,
+                priority = priority.type,
                 groupId = groupId,
                 areaId = areaId
             )
@@ -49,19 +49,7 @@ object TodoAPI {
         todoDao.deleteTodo(todo)
     }
 
-    suspend fun updateTodo(
-        todo: Todo
-//        title: String,
-//        description: String,
-//        completed: Boolean,
-//        startTime: Long,
-//        endTime: Long,
-//        updatedAt: Long,
-//        isExpirationWarn: Boolean,
-//        priority: Priority,
-//        groupId: Int,
-//        areaId: Int
-    ) {
+    suspend fun updateTodo(todo: Todo) {
         todoDao.updateTodo(todo)
     }
 

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun Empty(
     modifier: Modifier = Modifier,
-    text: String = "无任务"
+    text: String = "暂无任务"
 ) {
     Column(
         modifier = modifier
@@ -38,7 +38,7 @@ fun Empty(
                 .height(100.dp)
                 .width(100.dp)
                 .padding(10.dp),
-            tint = Color(150, 150, 150)
+            tint = Color(150, 150, 150, 100)
         )
 
         Text(
