@@ -27,8 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.kartjim.todoest.ui.views.calendar.CalendarViewModel
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -118,7 +116,7 @@ fun go2Month(scope: CoroutineScope, state: CalendarState, month: YearMonth) {
 
 @Composable
 fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 5.dp)) {
         for (dayOfWeek in daysOfWeek) {
             Text(
                 modifier = Modifier.weight(1f),

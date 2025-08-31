@@ -9,11 +9,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,11 +17,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.router.Routers
 import com.kartjim.todoest.ui.views.calendar.month.MonthView
+import com.kartjim.todoest.ui.views.calendar.month.WeekView
 import com.kizitonwose.calendar.core.now
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.yearMonth
 import kotlin.time.ExperimentalTime
+
+
 
 @OptIn(ExperimentalTime::class)
 @Composable
@@ -39,6 +35,7 @@ fun Calendar(
     ) {
         val selectedDate = viewModel.selectedDate.collectAsState();
         val todosByDay = viewModel.todosByDay.collectAsState();
+        val viewType = viewModel.currentViewType.collectAsState();
 
         Box(
             modifier = Modifier.fillMaxSize()
@@ -52,9 +49,15 @@ fun Calendar(
                         it -> viewModel.changeSelectDate(it)
                     },
                     header = {
-                        ToolBar()
+                        ToolBar(viewType.value, onChange = {
+                            it -> viewModel.changeViewType(it)
+                        })
                     }
                 )
+
+                // 切换动画
+//                WeekView()
+
                 DayTodos(todosByDay.value)
             }
 
