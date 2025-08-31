@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircleOutline
+import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
@@ -40,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kartjim.todoest.data.entity.Todo
+import com.kartjim.todoest.ui.component.Empty
 import com.kartjim.todoest.ui.component.Layout
 import com.kartjim.todoest.ui.component.todo.TodoItem
 import com.kartjim.todoest.ui.router.Routers
@@ -145,14 +150,19 @@ fun Home(
                                     onDismissRequest = { expanded = false },
                                 ) {
                                     DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                            if (!showCompleted.value) "显示已完成的任务"
-                                            else "隐藏已完成的任务"
-                                        )},
+                                        text = { Text(if (showCompleted.value) "显示已完成的任务" else "隐藏已完成的任务") },
                                         onClick = {
                                             viewModel.changeShowCompleted(!showCompleted.value)
                                         },
+                                        trailingIcon = {
+                                            Checkbox(
+                                                checked = showCompleted.value,
+                                                onCheckedChange = {
+                                                    viewModel.changeShowCompleted(!showCompleted.value)
+                                                },
+                                                modifier = Modifier.padding(0.dp)
+                                            )
+                                        }
                                     )
                                 }
                             }
@@ -167,11 +177,19 @@ fun Home(
                         modifier =
                             Modifier
                                 .fillMaxSize()
-//                        .padding(10.dp),
                     ) {
                         var showEditDialog by remember { mutableStateOf(false) }
                         var currentTodo by remember { mutableStateOf<Todo?>(null) }
                         val todos by viewModel.todos.collectAsState()
+
+                        if (todos.isEmpty()) {
+                            Empty(
+                                modifier = Modifier.fillMaxSize(),
+                                text = "所有任务已完成！休息一下吧☕️",
+                                icon = Icons.Default.Checklist
+                            )
+                        }
+
                         LazyColumn {
                             items(
                                 todos,

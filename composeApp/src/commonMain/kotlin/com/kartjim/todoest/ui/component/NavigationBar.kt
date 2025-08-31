@@ -32,8 +32,7 @@ fun NavigationBar(
             .height(1.dp).fillMaxWidth()
             .background(
                 if (isDark) Color(50, 50, 50)
-                else
-                    Color(200, 200, 200)
+                else Color(220, 230, 240)
             )
     ) {}
     Row(

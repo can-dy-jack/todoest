@@ -4,50 +4,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kartjim.todoest.data.api.TodoAPI
 import com.kartjim.todoest.data.entity.Todo
-import kotlinx.coroutines.Dispatchers
+import com.kizitonwose.calendar.core.now
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.yearMonth
 import kotlin.time.ExperimentalTime
 
 @OptIn(ExperimentalTime::class)
 class CalendarViewModel: ViewModel() {
-    private val _timestamp = MutableStateFlow(getNowTimestamp())
-    val timestamp = _timestamp.asStateFlow()
+    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    val selectedDate = _selectedDate.asStateFlow();
+
+    fun changeSelectDate(data: LocalDate) {
+        _selectedDate.update { data }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val todos = _timestamp
-        .flatMapLatest { timestamp ->
-            TodoAPI.getTodosByDate(timestamp)
+    private val _todosByDay = _selectedDate
+        .flatMapLatest { date ->
+            TodoAPI.getTodosByDate(date.toEpochDays())
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
         )
-
-    fun updateTimestamp(value: Long) {
-        _timestamp.update{ value }
-    }
-
-    private fun getNowTimestamp(): Long {
-        val date = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        // 当前天 0 点
-        val now = dateToTimestamp(date.year, date.month, date.day);
-        return now
-    }
+    val todosByDay = _todosByDay
 }
 

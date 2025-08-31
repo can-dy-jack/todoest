@@ -16,14 +16,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun Empty(
+    text: String = "暂无任务",
+    icon: ImageVector = Icons.Default.AssignmentTurnedIn,
     modifier: Modifier = Modifier,
-    text: String = "暂无任务"
 ) {
     Column(
         modifier = modifier
@@ -32,7 +34,7 @@ fun Empty(
     ) {
         Spacer(modifier.weight(1f))
         Icon(
-            Icons.Default.AssignmentTurnedIn,
+            icon,
             contentDescription = "",
             modifier = Modifier
                 .height(100.dp)
@@ -43,7 +45,8 @@ fun Empty(
 
         Text(
             text,
-            fontSize = 18.sp
+            fontSize = 18.sp,
+            color = Color.Gray,
         )
         Spacer(modifier.weight(1f))
     }
