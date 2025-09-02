@@ -2,6 +2,7 @@ package com.kartjim.todoest.data.api
 
 import com.kartjim.todoest.data.AppDatabase
 import com.kartjim.todoest.data.Priority
+import com.kartjim.todoest.data.dao.DateCountResult
 import com.kartjim.todoest.data.entity.Todo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.stateIn
@@ -53,7 +54,7 @@ object TodoAPI {
         todoDao.updateTodo(todo)
     }
 
-    fun getTodoSize(startTime: Long, endTime: Long): Flow<Int> {
-        return todoDao.getTodoSize(startTime, endTime)
+    fun getTodoSize(month: String): Flow<List<DateCountResult>> {
+        return todoDao.getTodoSize(month)
     }
 }

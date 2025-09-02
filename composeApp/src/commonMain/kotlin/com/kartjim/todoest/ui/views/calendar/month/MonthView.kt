@@ -7,8 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,10 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kartjim.todoest.data.dao.DateCountResult
 import com.kizitonwose.calendar.compose.CalendarState
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -51,12 +56,12 @@ import kotlin.time.ExperimentalTime
 fun MonthView(
     selectedDate: LocalDate? = LocalDate.now(),
     onSelected: (date: LocalDate) -> Unit = {},
+    currentMonth: YearMonth,
+    onCurrentMonthChange: (YearMonth) -> Unit = {},
+    todoSizeByMonth: List<DateCountResult> = emptyList(),
     header: @Composable (() -> Unit) = {},
     modifier: Modifier = Modifier,
 ) {
-//    var selectedDate by remember { mutableStateOf<LocalDate?>(LocalDate.now()) }
-    var currentMonth by remember { mutableStateOf(YearMonth.now())  }
-
     val month = remember { YearMonth.now() }
     val startMonth = remember { month.minusMonths(100) }
     val endMonth = remember { month.plusMonths(100) }
@@ -70,7 +75,7 @@ fun MonthView(
     )
 
     LaunchedEffect(state.firstVisibleMonth.yearMonth) {
-        currentMonth = state.firstVisibleMonth.yearMonth;
+        onCurrentMonthChange(state.firstVisibleMonth.yearMonth)
     }
     val scope = rememberCoroutineScope()
 
@@ -102,7 +107,8 @@ fun MonthView(
                 onOutClicked = { it ->
                     go2Month(scope, state, it.date.yearMonth)
                     onSelected(it.date)
-                }
+                },
+                hasTodo = getDayNumber(todoSizeByMonth, it) > 0,
             )},
         )
     }
@@ -143,6 +149,7 @@ fun Day(
     isSelected: Boolean,
     onClicked: (CalendarDay) -> Unit,
     onOutClicked: (CalendarDay) -> Unit,
+    hasTodo: Boolean,
 ) {
     Box(
         modifier = Modifier
@@ -178,10 +185,41 @@ fun Day(
             color = Color.Gray;
         }
 
-        Text(
-            text = day.date.day.toString(),
-            color = color,
-            fontWeight = if (day.date == LocalDate.now()) FontWeight.Bold else FontWeight.Normal
-        )
+        Column(
+            modifier = Modifier.padding(5.dp).fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = day.date.day.toString(),
+                color = color,
+                fontWeight = if (day.date == LocalDate.now()) FontWeight.Bold else FontWeight.Normal,
+                textAlign = TextAlign.Center
+            )
+
+            if (hasTodo) {
+                Box(
+                    modifier = Modifier
+                        .background(color = if (isSelected) Color.White else MaterialTheme.colorScheme.primary)
+                        .width(16.dp)
+                        .height(1.dp)
+                        .padding(top = 8.dp)
+                ) {}
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+        }
     }
+}
+
+fun getDayNumber(list: List<DateCountResult>, day: CalendarDay): Int {
+    val year = day.date.year
+    val month = day.date.month.number
+    val d = day.date.day
+    val date = "$year-${if (month < 10) "0$month" else month}-${if (d < 10) "0$d" else d}"
+
+    val n = list.find({
+            item -> item.date == date
+    })
+    return n?.count ?: 0
 }
